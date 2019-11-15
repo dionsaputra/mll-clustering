@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from scipy.spatial import distance
 
 class Agglomerative:
     def __init__(self, data, k, linkage = 'single'):
@@ -9,10 +10,6 @@ class Agglomerative:
         self.group = []
         self.set_linkage(linkage)
         self.fit()
-    
-    #Calculate euclidean distance
-    def euclidean_distance(self, a, b):
-        return np.sqrt(np.sum(a-b) ** 2)
 
     def set_linkage(self, linkage):
         if linkage == 'single':
@@ -31,7 +28,7 @@ class Agglomerative:
 
     # Initialize distance of each point in group
     # and then iterate distance for all point in each group
-    def init_dist_array(self):
+    def init_dist(self):
         self.dist_array = []
         i = 0
         while i < self.data_length:
@@ -47,7 +44,7 @@ class Agglomerative:
         min_dist = math.inf
         for idx_a in pointA:
             for idx_b in pointB:
-                min_dist = min(min_dist, self.euclidean_distance(self.data[idx_a], self.data[idx_b]))
+                min_dist = min(min_dist, distance.euclidean(self.data[idx_a], self.data[idx_b]))
         return min_dist
 
     #Find for max distance for linkage = complete
@@ -55,7 +52,7 @@ class Agglomerative:
         max_dist = 0
         for idx_a in pointA:
             for idx_b in pointB:
-                max_dist = max(max_dist, self.euclidean_distance(self.data[idx_a], self.data[idx_b]))
+                max_dist = max(max_dist, distance.euclidean(self.data[idx_a], self.data[idx_b]))
         return max_dist
 
     #Find for average distance for each point in group for linkage = average
@@ -64,7 +61,7 @@ class Agglomerative:
         num_of_pair = len(pointA) * len(pointB)
         for idx_a in pointA:
             for idx_b in pointB:
-                dist += self.euclidean_distance(self.data[idx_a], self.data[idx_b]) / num_of_pair
+                dist += distance.euclidean(self.data[idx_a], self.data[idx_b]) / num_of_pair
         return dist
 
     #Find for average point for each group and calculate distance for linkage = average
@@ -79,13 +76,13 @@ class Agglomerative:
         else:
             for idx_b in pointB:
                 avgB += self.data[idx_b] / len(pointB)
-        return self.euclidean_distance(avgA, avgB)
+        return distance.euclidean(avgA, avgB)
 
     # Fit data from init and then joining each group untul it has only k group
     # If it has only k groups then we set cluster
     def fit(self):
         self.init_group()
-        self.init_dist_array()
+        self.init_dist()
 
         while self.num_of_group > self.k:
             curr = self.dist_array.pop(0)
@@ -110,7 +107,7 @@ class Agglomerative:
     # Set cluster for all group that have been described before
     def set_cluster(self):
         self.group = filter(lambda x: len(x) > 0, self.group)
-        self.clusters = [None for _ in range(self.data_length)]
+        self.clusters = [0 for _ in range(self.data_length)]
         curr_cluster = 1
         for pointgroup in self.group:
             for member_id in pointgroup:
@@ -124,7 +121,7 @@ class Agglomerative:
     # Predict function
     def predict(self, point):
         min_dist = math.inf
-        cluster = None
+        cluster = 0
         point = np.array(point)
         for i in range(self.k):
             distance = self.linkage_function(self.group[i], point, True)
