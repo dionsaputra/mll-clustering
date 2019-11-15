@@ -1,0 +1,7 @@
+python3 tester.py
+
+akurasi dbscan:  0.6333333333333333
+akurasi agglomerative dengan single linkage:  0.3466666666666667
+akurasi agglomerative dengan complete linkage:  0.86
+akurasi agglomerative dengan average linkage:  0.82
+akurasi agglomerative dengan average complete linkage:  0.8133333333333334
