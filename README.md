@@ -24,7 +24,6 @@ python3 tester.py
 - Langkah selanjutnya adalah melakukan join dengan group lain, perlu diperhatikan bahwa ketika join, nilai dari euclidean distance juga perlu diupdate karena jumlha dari group akan berkurang, melainkan ada jumlah data yang bertambah pada suatu group.
 - Ulangi proses join sampai nilai group sama dengan nilai dari *k* yang merupakan banyak cluster yang ingin dibentuk.
 - Ketika nilai *k* sama dengan banyak group maka simpan kedalam cluster, misalkan saja cluster mulai dari 1.
-- Untuk mencetak hasil cluster, maka ada fungsi ```get_all()```
 
 ## DBScan
 - Pertama melakukan inisiasi label cluster dengan nilai 0 untuk setiap data train, menandakan item belum di-*cluster*-kan
