@@ -63,7 +63,7 @@ class Tester():
             if labels[i] == y_test[i]:
                 accurate_sum += 1
 
-        print("akurasi kmeans: ", accurate_sum/len(labels))
+        print("Akurasi K-Means: ", accurate_sum/len(labels))
 
         kmeans_sklearn = KMeans(n_clusters=3)
         kmeans_sklearn.fit(X_train)
@@ -73,7 +73,7 @@ class Tester():
             if kmeans_sklearn.labels_[i] == y_test[i]:
                 sklearn_accurate_sum += 1
 
-        print("akurasi kmeans sklearn: ", sklearn_accurate_sum/len(labels))
+        print("Akurasi K-Means sklearn: ", sklearn_accurate_sum/len(labels))
 
 
     def test_dbscan(self):
@@ -106,7 +106,7 @@ class Tester():
             if labels[i] == y_test[i]:
                 accurate_sum += 1
 
-        print("akurasi dbscan: ", accurate_sum/len(labels))
+        print("Akurasi DBScan: ", accurate_sum/len(labels))
 
         clustering_labels = DBSCAN(
             eps=epsilon, min_samples=min_pts).fit_predict(X_train)
@@ -117,7 +117,7 @@ class Tester():
             if clustering_labels[i] == y_test[i]:
                 sklearn_accurate_sum += 1
 
-        print("akurasi dbscan: ", sklearn_accurate_sum/len(labels))
+        print("Akurasi DBScan sklearn: ", sklearn_accurate_sum/len(labels))
 
     def test_agglomerative(self):
         agglomerative_single_model = Agglomerative(self.features, 3)
@@ -169,6 +169,6 @@ class Tester():
 
 if __name__ == "__main__":
     tester = Tester()
-    # tester.test_dbscan()
+    tester.test_dbscan()
     tester.test_kmeans()
     # tester.test_agglomerative()

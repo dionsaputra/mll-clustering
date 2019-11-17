@@ -24,3 +24,10 @@ python3 tester.py
 - Iterasi setiap data train. Apabila item data belum di-*cluster*-kan, hitung jumlah tetangga yang *reachable* dari item. Apabila jumlah tetangga < `min_pts`, labeli sementara item sebagai outlier.
 - Apabila jumlah tetangga >= `min_pts`, buat sebuah cluster baru dan ekspansi cluster tersebut.
 - Saat ekspansi cluster, cari semua tetangga yang *reachable* dari item saat ini. Untuk setiap tetangga apabila ia telah dilabeli sebagai *outlier* ubah labelnya menjadi label *cluster* saat ini. Untuk item yang belum dilabeli lakukan pencarian secara BFS tetangga-tetangga lainnya.
+
+## KMeans
+- Pertama dilakukan insiasi jumlah centroid sesuai input dan maksimal iterasi
+- Tentukan sebanyak K centroid dari data dengan menggunakan algoritma random
+- Lakukan iterasi sebanyak maksimal iterasi
+- Untuk setiap iterasinya, akan di tentukan tiap titik akan masuk ke cluster mana sesuai dengan jarak centroid terdekat.
+- Pada akhir iterasi, centroid-centroid tersebut akan di update. Nilai centroid menjadi nilai rata rata dari semual titik yang masuk cluster centroid tersebut

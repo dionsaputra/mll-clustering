@@ -8,6 +8,7 @@ class Kmeans():
         self.k = k
         self.max_iterations = max_iterations
 
+
     def load_data(self, input_data):
         self.data = input_data
         self.labels = [0]*len(self.data)
@@ -18,12 +19,14 @@ class Kmeans():
             idx = np.random.randint(0, len(self.data))
             self.centroids.append(self.data[idx])
 
+
     def distance(self, pointA, pointB):
         sum_square = 0.0
         for i in range(len(pointA)):
             sum_square += (pointA[i] - pointB[i]) ** 2
 
         return math.sqrt(sum_square)
+
 
     def find_nearest_cluster(self, point):
         distances = []
@@ -33,16 +36,16 @@ class Kmeans():
 
         return distances.index(min(distances))
 
+
     def update_centroids(self):
         for i in range(len(self.clusters)):
             self.centroids[i] = np.average(self.clusters[i], axis=0)
-        
-    def is_converge(self):
-        return False
+
 
     def print_centroid(self):
         for i in range(3):
             print(self.centroids[i])
+
 
     def train(self):
         for i in range(self.max_iterations):
