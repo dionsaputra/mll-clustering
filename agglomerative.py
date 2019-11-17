@@ -77,7 +77,7 @@ class Agglomerative:
                     dist += distance.euclidean(self.data[idx_a], self.data[idx_b]) / num_of_pair
         return dist
 
-    #Find for average point for each group and calculate distance for linkage = average
+    #Find for average point for each group and calculate distance for linkage = average_group
     def average_group(self, pointA, pointB, singleB = False):
         idx = len(self.data[0])
         avgA = np.array([0.0 for _ in range(idx)])
