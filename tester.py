@@ -3,6 +3,7 @@ from dbscan import Dbscan
 from agglomerative import Agglomerative
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
+from sklearn.cluster import DBSCAN
 
 
 class Tester():
@@ -34,14 +35,14 @@ class Tester():
         label_1 = "Iris-setosa"
         label_2 = "Iris-versicolor"
         label_3 = "Iris-virginica"
-        
+
         for item in self.data["label"]:
             if item == label_1:
-                exact_labels.append(3)
-            elif item == label_2:
-                exact_labels.append(1)
-            else:
                 exact_labels.append(2)
+            elif item == label_2:
+                exact_labels.append(3)
+            else:
+                exact_labels.append(1)
 
         epsilon = 2
         min_pts = 2
@@ -53,8 +54,6 @@ class Tester():
         dbscan.load_data(X_train.to_numpy().tolist())
         dbscan.train()
         labels = dbscan.predict(X_test.to_numpy().tolist())
-        print(y_test)
-        print(labels)
 
         accurate_sum = 0
         for i in range(len(labels)):
@@ -62,6 +61,17 @@ class Tester():
                 accurate_sum += 1
 
         print("akurasi dbscan: ", accurate_sum/len(labels))
+
+        clustering_labels = DBSCAN(
+            eps=epsilon, min_samples=min_pts).fit_predict(X_train)
+        clustering_labels = [c + 3 for c in clustering_labels]
+
+        sklearn_accurate_sum = 0
+        for i in range(len(labels)):
+            if clustering_labels[i] == y_test[i]:
+                sklearn_accurate_sum += 1
+
+        print("akurasi dbscan: ", sklearn_accurate_sum/len(labels))
 
     def test_agglomerative(self):
         agglomerative_single_model = Agglomerative(self.features, 3)

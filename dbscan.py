@@ -69,12 +69,16 @@ class Dbscan():
     def predict(self, data_test):
         predict_labels = []
         for item_test in data_test:
-            minIdx = None
             minDistance = 1000000000
-            for i in range(len(self.data)):
-                distance = self.distance(item_test, self.data[i])
-                if distance < minDistance:
-                    minDistance = distance
-                    minIdx = i
-            predict_labels.append(self.labels[minIdx])
+            selectedCluster = 0
+            for cluster_key in self.clusters:
+                maxDistance = -1
+                for item in self.clusters[cluster_key]:
+                    distance = self.distance(item_test, item)
+                    if distance > maxDistance:
+                        maxDistance = distance
+                if maxDistance < minDistance:
+                    minDistance = maxDistance
+                    selectedCluster = cluster_key
+            predict_labels.append(selectedCluster)
         return predict_labels
