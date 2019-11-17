@@ -188,22 +188,22 @@ class Tester():
             agglomerative_average_group_pred.append(agglomerative_average_group_model.predict(row))
 
         print(
-            'akurasi agglomerative dengan single linkage = ',
+            'Akurasi agglomerative dengan single linkage = ',
             self.get_accuracy(self.apply_map_to_cluster(agglomerative_single_pred, agglomerative_single_map), y_test.reset_index(drop=True))
         )
 
         print(
-            'akurasi agglomerative dengan complete linkage = ',
+            'Akurasi agglomerative dengan complete linkage = ',
             self.get_accuracy(self.apply_map_to_cluster(agglomerative_complete_pred, agglomerative_complete_map), y_test.reset_index(drop=True))
         )
 
         print(
-            'akurasi agglomerative dengan average linkage = ',
+            'Akurasi agglomerative dengan average linkage = ',
             self.get_accuracy(self.apply_map_to_cluster(agglomerative_average_pred, agglomerative_average_map), y_test.reset_index(drop=True))
         )
 
         print(
-            'akurasi agglomerative dengan average_group linkage = ',
+            'Akurasi agglomerative dengan average_group linkage = ',
             self.get_accuracy(self.apply_map_to_cluster(agglomerative_average_group_pred, agglomerative_average_group_map), y_test.reset_index(drop=True))
         )
 
@@ -218,16 +218,16 @@ class Tester():
         agg_ward_map = self.get_mapping_to_label(3, model_ward.labels_, y_train)
 
         print(
-            'akurasi agglomerative sklearn dengan single linkage = %0.3f' % metrics.v_measure_score(y_train, model_single.labels_)
+            'Akurasi agglomerative sklearn dengan single linkage = %0.3f' % metrics.v_measure_score(y_train, model_single.labels_)
         )
         print(
-            'akurasi agglomerative sklearn dengan complete linkage = %0.3f' % metrics.v_measure_score(y_train, model_complete.labels_)
+            'Akurasi agglomerative sklearn dengan complete linkage = %0.3f' % metrics.v_measure_score(y_train, model_complete.labels_)
         )
         print(
-            'akurasi agglomerative sklearn dengan average linkage = %0.3f' % metrics.v_measure_score(y_train, model_average.labels_)
+            'Akurasi agglomerative sklearn dengan average linkage = %0.3f' % metrics.v_measure_score(y_train, model_average.labels_)
         )
         print(
-            'akurasi agglomerative sklearn dengan ward linkage = %0.3f' % metrics.v_measure_score(y_train, model_ward.labels_)
+            'Akurasi agglomerative sklearn dengan ward linkage = %0.3f' % metrics.v_measure_score(y_train, model_ward.labels_)
         )
 
 
