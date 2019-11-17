@@ -11,10 +11,16 @@ Eksekusi tester.py
 python3 tester.py
 ```
 
-## Agglometarive
-1. Pertama melakukan inisiasi group sebanyak jumlah data.
-2. Menyimpan semua euclidean distance dari data dari setiap group yang terdefenisi sesuai dengan linkage yang digunakan.
-3. Langkah selanjutnya adalah melakukan join dengan group lain, perlu diperhatikan bahwa ketika join, nilai dari euclidean distance juga perlu diupdate karena jumlha dari group akan berkurang, melainkan ada jumlah data yang bertambah pada suatu group.
-4. Ulangi proses join sampai nilai group sama dengan nilai dari *k* yang merupakan banyak cluster yang ingin dibentuk.
-5. Ketika nilai *k* sama dengan banyak group maka simpan kedalam cluster, misalkan saja cluster mulai dari 1.
-6. Untuk mencetak hasil cluster, maka ada fungsi ```get_all()```
+## Agglomerative
+- Pertama melakukan inisiasi group sebanyak jumlah data.
+- Menyimpan semua euclidean distance dari data dari setiap group yang terdefenisi sesuai dengan linkage yang digunakan.
+- Langkah selanjutnya adalah melakukan join dengan group lain, perlu diperhatikan bahwa ketika join, nilai dari euclidean distance juga perlu diupdate karena jumlha dari group akan berkurang, melainkan ada jumlah data yang bertambah pada suatu group.
+- Ulangi proses join sampai nilai group sama dengan nilai dari *k* yang merupakan banyak cluster yang ingin dibentuk.
+- Ketika nilai *k* sama dengan banyak group maka simpan kedalam cluster, misalkan saja cluster mulai dari 1.
+- Untuk mencetak hasil cluster, maka ada fungsi ```get_all()```
+
+## DBScan
+- Pertama melakukan inisiasi label cluster dengan nilai 0 untuk setiap data train, menandakan item belum di-*cluster*-kan
+- Iterasi setiap data train. Apabila item data belum di-*cluster*-kan, hitung jumlah tetangga yang *reachable* dari item. Apabila jumlah tetangga < `min_pts`, labeli sementara item sebagai outlier.
+- Apabila jumlah tetangga >= `min_pts`, buat sebuah cluster baru dan ekspansi cluster tersebut.
+- Saat ekspansi cluster, cari semua tetangga yang *reachable* dari item saat ini. Untuk setiap tetangga apabila ia telah dilabeli sebagai *outlier* ubah labelnya menjadi label *cluster* saat ini. Untuk item yang belum dilabeli lakukan pencarian secara BFS tetangga-tetangga lainnya.
