@@ -5,8 +5,8 @@ from kmeans import Kmeans
 from agglomerative import Agglomerative
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
-from sklearn.cluster import DBSCAN
-from sklearn.cluster import KMeans
+from sklearn import metrics
+from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
 
 
 
@@ -206,6 +206,32 @@ class Tester():
             'akurasi agglomerative dengan average_group linkage = ',
             self.get_accuracy(self.apply_map_to_cluster(agglomerative_average_group_pred, agglomerative_average_group_map), y_test.reset_index(drop=True))
         )
+
+        model_single = AgglomerativeClustering(3, linkage="single").fit(X_train)
+        model_complete = AgglomerativeClustering(3, linkage="complete").fit(X_train)
+        model_average = AgglomerativeClustering(3, linkage="average").fit(X_train)
+        model_ward = AgglomerativeClustering(3, linkage="ward").fit(X_train)
+        
+        agg_single_map = self.get_mapping_to_label(3, model_single.labels_, y_train)
+        agg_complete_map = self.get_mapping_to_label(3, model_complete.labels_, y_train)
+        agg_average_map = self.get_mapping_to_label(3, model_average.labels_, y_train)
+        agg_ward_map = self.get_mapping_to_label(3, model_ward.labels_, y_train)
+
+        print(
+            'akurasi agglomerative sklearn dengan single linkage = %0.3f' % metrics.v_measure_score(y_train, model_single.labels_)
+        )
+        print(
+            'akurasi agglomerative sklearn dengan complete linkage = %0.3f' % metrics.v_measure_score(y_train, model_complete.labels_)
+        )
+        print(
+            'akurasi agglomerative sklearn dengan average linkage = %0.3f' % metrics.v_measure_score(y_train, model_average.labels_)
+        )
+        print(
+            'akurasi agglomerative sklearn dengan ward linkage = %0.3f' % metrics.v_measure_score(y_train, model_ward.labels_)
+        )
+
+
+
 if __name__ == "__main__":
     tester = Tester()
     tester.test_dbscan()
