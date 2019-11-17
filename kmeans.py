@@ -2,7 +2,7 @@ import numpy as np
 import math
 
 
-class KMeans():
+class Kmeans():
 
     def __init__(self, k=3, max_iterations=100):
         self.k = k

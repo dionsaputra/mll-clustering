@@ -1,10 +1,12 @@
 import pandas as pd
 from dbscan import Dbscan
-from kmeans import KMeans
+from kmeans import Kmeans
 from agglomerative import Agglomerative
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from sklearn.cluster import DBSCAN
+from sklearn.cluster import KMeans
+
 
 
 class Tester():
@@ -46,12 +48,12 @@ class Tester():
                 exact_labels.append(2)
 
         k = 3
-        kmeans = KMeans(k)
+        kmeans = Kmeans(k)
 
         X_train, X_test, y_train, y_test = train_test_split(
             self.features, exact_labels, test_size=0.33, random_state=42
         )
-        
+
         kmeans.load_data(X_train.to_numpy().tolist())
         kmeans.train()
         labels = kmeans.predict(X_test.to_numpy().tolist())
@@ -62,6 +64,17 @@ class Tester():
                 accurate_sum += 1
 
         print("akurasi kmeans: ", accurate_sum/len(labels))
+
+        kmeans_sklearn = KMeans(n_clusters=3)
+        kmeans_sklearn.fit(X_train)
+
+        sklearn_accurate_sum = 0
+        for i in range(len(labels)):
+            if kmeans_sklearn.labels_[i] == y_test[i]:
+                sklearn_accurate_sum += 1
+
+        print("akurasi kmeans sklearn: ", sklearn_accurate_sum/len(labels))
+
 
     def test_dbscan(self):
         exact_labels = []
