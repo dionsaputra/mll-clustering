@@ -2,7 +2,14 @@
 Implementasi tiga cara clustering yaitu Agglomerative, DBScan, dan K-Means
 
 **Kontributor**:
+
+13516045 - Dion Saputra
+
+
 13516079 - Harry Setiawan Hamjaya
+
+
+13516155 - Restu Wahyu Kartiko
 
 ## Petunjuk Penggunaan Program
 
