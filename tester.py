@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from dbscan import Dbscan
 from kmeans import Kmeans
 from agglomerative import Agglomerative
@@ -118,57 +119,95 @@ class Tester():
                 sklearn_accurate_sum += 1
 
         print("Akurasi DBScan sklearn: ", sklearn_accurate_sum/len(labels))
+    
+    def get_mapping_to_label(self, n_cluster, y, label):
+        uc = np.unique(np.array(y))
+        cluster = [{} for i in range(len(uc))]
+        label = label.reset_index(drop=True)
+        for i in range(len(y)):
+            if y[i] is not None and y[i] >= 0:
+                loc = np.where(uc == y[i])[0][0]
+                if label[i] in cluster[loc]:
+                    cluster[loc][label[i]] += 1
+                else:
+                    cluster[loc][label[i]] = 0
+        map = {}
+        for i in range(len(uc)):
+            if cluster[i]:
+                map[uc[i]] = max(cluster[i], key=cluster[i].get)
+        return map
+
+    def apply_map_to_cluster(self, y, map):
+        return [map[i] for i in y]
+    
+    def get_accuracy(self, y_pred, y_test):
+        count = 0
+        for i in range(len(y_pred)):
+            if y_pred[i] == y_test[i]:
+                count += 1
+        return count / len(y_pred)
 
     def test_agglomerative(self):
-        agglomerative_single_model = Agglomerative(self.features, 3)
+
+        df = pd.read_csv('iris.data', header=None)
+
+        x = df.drop([4], axis=1)
+        y = df[4]  
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            x, y, test_size=0.2, random_state=79
+        )
+
+        agglomerative_single_model = Agglomerative(X_train, 3)
         agglomerative_complete_model = Agglomerative(
-            self.features, 3, 'complete')
+            X_train, 3, 'complete')
         agglomerative_average_model = Agglomerative(
-            self.features, 3, 'average')
+            X_train, 3, 'average')
         agglomerative_average_group_model = Agglomerative(
-            self.features, 3, 'average_group')
+            X_train, 3, 'average_group')
 
         agglomerative_single_label = agglomerative_single_model.get_cluster()
         agglomerative_complete_label = agglomerative_complete_model.get_cluster()
         agglomerative_average_label = agglomerative_average_model.get_cluster()
         agglomerative_average_group_label = agglomerative_average_group_model.get_cluster()
 
-        accurate_sum_1 = 0
-        for i in range(len(agglomerative_single_label)):
-            # print(agglomerative_single_label[i], " ", self.exact_labels[i])
-            if agglomerative_single_label[i] == self.exact_labels[i]:
-                accurate_sum_1 += 1
-
-        accurate_sum_2 = 0
-        for i in range(len(agglomerative_complete_label)):
-            # print(agglomerative_complete_label[i], " ", self.exact_labels[i])
-            if agglomerative_complete_label[i] == self.exact_labels[i]:
-                accurate_sum_2 += 1
-
-        accurate_sum_3 = 0
-        for i in range(len(agglomerative_average_label)):
-            # print(agglomerative_average_label[i], " ", self.exact_labels[i])
-            if agglomerative_average_label[i] == self.exact_labels[i]:
-                accurate_sum_3 += 1
-
-        accurate_sum_4 = 0
-        for i in range(len(agglomerative_average_group_label)):
-            # print(agglomerative_average_group_label[i], " ", self.exact_labels[i])
-            if agglomerative_average_group_label[i] == self.exact_labels[i]:
-                accurate_sum_4 += 1
-
-        print("akurasi agglomerative dengan single linkage: ",
-              accurate_sum_1/len(self.exact_labels))
-        print("akurasi agglomerative dengan complete linkage: ",
-              accurate_sum_2/len(self.exact_labels))
-        print("akurasi agglomerative dengan average linkage: ",
-              accurate_sum_3/len(self.exact_labels))
-        print("akurasi agglomerative dengan average complete linkage: ",
-              accurate_sum_4/len(self.exact_labels))
+        agglomerative_single_map = self.get_mapping_to_label(3, agglomerative_single_label, y_train)
+        agglomerative_complete_map = self.get_mapping_to_label(3, agglomerative_complete_label, y_train)
+        agglomerative_average_map = self.get_mapping_to_label(3, agglomerative_average_label, y_train)
+        agglomerative_average_group_map = self.get_mapping_to_label(3, agglomerative_average_group_label, y_train)
 
 
+        agglomerative_single_pred = []
+        agglomerative_complete_pred = []
+        agglomerative_average_pred = []
+        agglomerative_average_group_pred = []
+        for i, row in X_test.iterrows():
+            agglomerative_single_pred.append(agglomerative_single_model.predict(row))
+            agglomerative_complete_pred.append(agglomerative_complete_model.predict(row))
+            agglomerative_average_pred.append(agglomerative_average_model.predict(row))
+            agglomerative_average_group_pred.append(agglomerative_average_group_model.predict(row))
+
+        print(
+            'akurasi agglomerative dengan single linkage = ',
+            self.get_accuracy(self.apply_map_to_cluster(agglomerative_single_pred, agglomerative_single_map), y_test.reset_index(drop=True))
+        )
+
+        print(
+            'akurasi agglomerative dengan complete linkage = ',
+            self.get_accuracy(self.apply_map_to_cluster(agglomerative_complete_pred, agglomerative_complete_map), y_test.reset_index(drop=True))
+        )
+
+        print(
+            'akurasi agglomerative dengan average linkage = ',
+            self.get_accuracy(self.apply_map_to_cluster(agglomerative_average_pred, agglomerative_average_map), y_test.reset_index(drop=True))
+        )
+
+        print(
+            'akurasi agglomerative dengan average_group linkage = ',
+            self.get_accuracy(self.apply_map_to_cluster(agglomerative_average_group_pred, agglomerative_average_group_map), y_test.reset_index(drop=True))
+        )
 if __name__ == "__main__":
     tester = Tester()
     tester.test_dbscan()
     tester.test_kmeans()
-    # tester.test_agglomerative()
+    tester.test_agglomerative()
